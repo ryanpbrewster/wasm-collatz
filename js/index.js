@@ -22,16 +22,16 @@ function collatz_max(hi) {
 
 window.onload = function() {
   const dom_seed = document.getElementById("seed");
-  const dom_compute = document.getElementById("compute");
   const dom_js_output = document.getElementById("js-output");
   const dom_wasm_output = document.getElementById("wasm-output");
 
   import("../crate/pkg").then(module => {
     console.log("loaded module");
-    dom_compute.addEventListener("click", evt => {
+    setInterval(function() {
       let n = parseInt(dom_seed.value) || 3;
       dom_js_output.value = collatz_max(n);
       dom_wasm_output.value = module.collatz_max(n);
-    });
+      dom_seed.value = n + 1;
+    }, 0);
   });
 };
