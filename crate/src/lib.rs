@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate cfg_if;
-extern crate web_sys;
 extern crate wasm_bindgen;
+extern crate web_sys;
 
 use wasm_bindgen::prelude::*;
 
@@ -45,6 +45,7 @@ pub fn run() -> Result<(), JsValue> {
     Ok(())
 }
 
+#[wasm_bindgen]
 pub fn collatz_len(mut n: u32) -> usize {
     let mut count = 0;
     while n > 1 {
