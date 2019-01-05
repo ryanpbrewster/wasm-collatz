@@ -27,26 +27,9 @@ cfg_if! {
     }
 }
 
-// Called by our JS entry point to run the example.
 #[wasm_bindgen]
-pub fn run() -> Result<(), JsValue> {
-    set_panic_hook();
-
-    let window = web_sys::window().expect("should have a Window");
-    let document = window.document().expect("should have a Document");
-
-    let p: web_sys::Node = document.create_element("p")?.into();
-    p.set_text_content(Some("Hello from Rust, WebAssembly, and Webpack!"));
-
-    let body = document.body().expect("should have a body");
-    let body: &web_sys::Node = body.as_ref();
-    body.append_child(&p)?;
-
-    Ok(())
-}
-
-#[wasm_bindgen]
-pub fn collatz_len(mut n: u32) -> usize {
+pub fn collatz_len(n: u32) -> usize {
+    let mut n = n as u64;
     let mut count = 0;
     while n > 1 {
         n = if n % 2 == 0 { n / 2 } else { 3 * n + 1 };
@@ -55,16 +38,27 @@ pub fn collatz_len(mut n: u32) -> usize {
     count
 }
 
+#[wasm_bindgen]
+pub fn collatz_max(hi: u32) -> u32 {
+  (1..=hi).max_by_key(|&n| collatz_len(n)).unwrap()
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
 
     #[test]
-    fn smoke() {
+    fn len_smoke() {
         assert_eq!(collatz_len(1), 0);
         assert_eq!(collatz_len(2), 1);
         assert_eq!(collatz_len(3), 7);
         assert_eq!(collatz_len(4), 2);
         assert_eq!(collatz_len(5), 5);
+    }
+
+    #[test]
+    fn max_smoke() {
+        assert_eq!(collatz_max(1_000), 871);
+        assert_eq!(collatz_max(1_000_000), 837799);
     }
 }

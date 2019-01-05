@@ -7,6 +7,19 @@ function collatz_len(n) {
   return count;
 }
 
+function collatz_max(hi) {
+  let best = 1;
+  let best_score = 0;
+  for (let n=2; n <= hi; n++) {
+    let score = collatz_len(n);
+    if (score > best_score) {
+      best = n;
+      best_score = score;
+    }
+  }
+  return best;
+}
+
 window.onload = function() {
   const dom_seed = document.getElementById("seed");
   const dom_compute = document.getElementById("compute");
@@ -17,8 +30,8 @@ window.onload = function() {
     console.log("loaded module");
     dom_compute.addEventListener("click", evt => {
       let n = parseInt(dom_seed.value) || 3;
-      dom_js_output.value = collatz_len(n);
-      dom_wasm_output.value = module.collatz_len(n);
+      dom_js_output.value = collatz_max(n);
+      dom_wasm_output.value = module.collatz_max(n);
     });
   });
 };
