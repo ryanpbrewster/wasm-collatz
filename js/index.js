@@ -1,4 +1,4 @@
-function collatz_len(n) {
+function collatz_len_js(n) {
   let count = 0;
   while (n > 1) {
     n = n % 2 == 0 ? n / 2 : 3 * n + 1;
@@ -7,11 +7,11 @@ function collatz_len(n) {
   return count;
 }
 
-function collatz_max(hi) {
+function collatz_max_js(hi) {
   let best = 1;
   let best_score = 0;
   for (let n=2; n <= hi; n++) {
-    let score = collatz_len(n);
+    let score = collatz_len_js(n);
     if (score > best_score) {
       best = n;
       best_score = score;
@@ -29,8 +29,8 @@ window.onload = function() {
     console.log("loaded module");
     setInterval(function() {
       let n = parseInt(dom_seed.value) || 3;
-      dom_js_output.value = collatz_max(n);
-      dom_wasm_output.value = module.collatz_max(n);
+      dom_js_output.value = collatz_max_js(n);
+      dom_wasm_output.value = module.collatz_max_wasm(n);
       dom_seed.value = n + 1;
     }, 0);
   });

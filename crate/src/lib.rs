@@ -28,7 +28,7 @@ cfg_if! {
 }
 
 #[wasm_bindgen]
-pub fn collatz_len(n: u32) -> usize {
+pub fn collatz_len_wasm(n: u32) -> usize {
     let mut n = n as u64;
     let mut count = 0;
     while n > 1 {
@@ -39,8 +39,8 @@ pub fn collatz_len(n: u32) -> usize {
 }
 
 #[wasm_bindgen]
-pub fn collatz_max(hi: u32) -> u32 {
-  (1..=hi).max_by_key(|&n| collatz_len(n)).unwrap()
+pub fn collatz_max_wasm(hi: u32) -> u32 {
+  (1..=hi).max_by_key(|&n| collatz_len_wasm(n)).unwrap()
 }
 
 #[cfg(test)]
@@ -58,7 +58,7 @@ mod test {
 
     #[test]
     fn max_smoke() {
-        assert_eq!(collatz_max(1_000), 871);
-        assert_eq!(collatz_max(1_000_000), 837799);
+        assert_eq!(collatz_max_wasm(1_000), 871);
+        assert_eq!(collatz_max_wasm(1_000_000), 837799);
     }
 }
